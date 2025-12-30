@@ -30,10 +30,12 @@ export interface IProductListResponse {
 
 export interface IOrder extends IBuyer {
     total: number;
-    items: string[];
+    items: string[]; 
 }
 
 export interface IOrderResponse {
     id: string;
     total: number;
 }
+
+export type TBuyerErrors = Partial<Record<keyof IBuyer, string>>;

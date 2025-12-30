@@ -1,7 +1,13 @@
-import { IBuyer, TPayment } from '../../types/index';
-type TBuyerErrors = Partial<Record<keyof IBuyer, string>>;
+import { IBuyer, TPayment, TBuyerErrors } from '../../types/index';
+import { IEvents } from '../base/Events';
 
+/**
+ * Класс модели данных для хранения и валидации данных покупателя
+ * Отвечает за хранение данных покупателя при оформлении заказа
+ */
 export class Buyer {
+    constructor(private readonly events?: IEvents) {}
+
     protected payment: TPayment | null = null;
     protected address: string = '';
     protected email: string = '';
@@ -22,6 +28,7 @@ export class Buyer {
                 this.phone = value as string;
                 break;
         }
+        this.events?.emit('buyer:changed');
     }
 
     getData(): Partial<IBuyer> {
@@ -33,12 +40,12 @@ export class Buyer {
         };
     }
 
-
     clear(): void {
         this.payment = null;
         this.address = '';
         this.email = '';
         this.phone = '';
+        this.events?.emit('buyer:changed');
     }
 
     validate(): TBuyerErrors {
